@@ -1,5 +1,6 @@
 package principal;
 
+import controller.ControllerUsuario;
 import model.Vendedor;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -47,7 +48,7 @@ public class Login extends javax.swing.JFrame {
         });
         getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 200, -1));
 
-        jPasswordField1.setText("1");
+        jPasswordField1.setText("123456");
         jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPasswordField1KeyPressed(evt);
@@ -83,9 +84,18 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        vendedor.setUsuario(jTextField1.getText());
-        vendedor.setSenha(jPasswordField1.getText());
-        if (vendedor.verificaUsuario()) {
+        int codigo = Integer.parseInt(jTextField1.getText());
+        String senha = jPasswordField1.getText();
+        // Seta os clientes do banco de dados na consulta
+        String sql = ""
+                + "select usucodigo "
+                + "  from usuario "
+                + " where usucodigo = " + codigo + ""
+                + "   and ususenha = '" + senha + "'";
+        
+        ControllerUsuario controller = new ControllerUsuario();
+        boolean existe = controller.getUsuario(sql);
+        if (existe) {
             principal.setVisible(true);
             dispose();
         } else {

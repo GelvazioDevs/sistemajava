@@ -23,3 +23,5 @@
 hs_err_pid*
 replay_pid*
 /sistemacomercial/nbproject/private/
+/sistemacomercial/build/
+/sistemacomercial/dist/
