@@ -22,12 +22,7 @@ public class Cliente extends Pessoa {
     }
 
     public boolean getAlteracao() {
-
-        if (alteracao) {
-            return true;
-        }
-
-        return false;
+        return alteracao;
     }
 
     public void setListaCli(Vector<String> listaCli) {

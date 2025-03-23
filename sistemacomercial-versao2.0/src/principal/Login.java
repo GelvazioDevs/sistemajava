@@ -1,9 +1,9 @@
 package principal;
 
 import controller.ControllerUsuario;
-import model.Vendedor;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import model.Vendedor;
 
 /**
  *
@@ -40,7 +40,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField1.setText("1");
+        jTextField1.setText("gelvazio");
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField1KeyPressed(evt);
@@ -84,22 +84,15 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int codigo = Integer.parseInt(jTextField1.getText());
+        String login = jTextField1.getText();
         String senha = new String(jPasswordField1.getPassword());
-        // Seta os clientes do banco de dados na consulta
-        String sql = ""
-                + "select usucodigo "
-                + "  from usuario "
-                + " where usucodigo = " + codigo + ""
-                + "   and ususenha = '" + senha + "'";
         
         ControllerUsuario controller = new ControllerUsuario();
-        boolean existe = controller.getUsuario(sql);
-        if (existe) {
+        if (controller.validaLoginSenha(login, senha)) {
             principal.setVisible(true);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(null, "Usuário ou Senha Incorretos!!");
+            JOptionPane.showMessageDialog(null, "Usuário/Senha não confere!");
             jTextField1.requestFocus();
         }
     }//GEN-LAST:event_jButton1ActionPerformed

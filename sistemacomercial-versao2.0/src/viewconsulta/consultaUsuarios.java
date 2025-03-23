@@ -1,13 +1,13 @@
 package viewconsulta;
 
-import model.Pessoa;
-import model.Cliente;
 import controller.ControllerPessoa;
-import controller.ControllerUsuario;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.Cliente;
+import model.Pessoa;
 import model.Usuario;
+import principal.Conexao;
 
 /**
  * @author Gelvazio Camargo
@@ -20,7 +20,7 @@ public class consultaUsuarios extends javax.swing.JDialog {
     public String nome;
 
     Cliente cli = new Cliente();
-
+    Usuario usuario = new Usuario();
     
     /**
      * Creates new form consProduto
@@ -37,13 +37,12 @@ public class consultaUsuarios extends javax.swing.JDialog {
     }
 
     public void atualizaTabelaUsuarios(String sql){
-        ControllerUsuario controller = new ControllerUsuario();
         DefaultTableModel model = (DefaultTableModel) tabelaConsultaUsuarios.getModel();
         
         // Limpa a tabela
         model.setRowCount(0);
 
-        ArrayList<Usuario> listaUsuarios = controller.getAll(sql);
+        ArrayList<Usuario> listaUsuarios = Conexao.executaQuery(sql, usuario);
         for (Usuario auxUsuario : listaUsuarios) {
             model.addRow(new Object[]{
                 auxUsuario.getCodigo(),

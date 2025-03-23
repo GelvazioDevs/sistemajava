@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/fontes-github/sistemajava/sistemacomercial/src/principal/Login.java</file>
-            <file>file:/D:/fontes-github/sistemajava/sistemacomercial/src/model/Vendedor.java</file>
-            <file>file:/D:/fontes-github/sistemajava/sistemacomercial/src/controller/ControllerPessoa.java</file>
-            <file>file:/D:/fontes-github/sistemajava/sistemacomercial/src/controller/ControllerUsuario.java</file>
-            <file>file:/D:/fontes-github/sistemajava/sistemacomercial/src/principal/conexao/TesteConexaoBanco.java</file>
-            <file>file:/D:/fontes-github/sistemajava/sistemacomercial/src/principal/conexao/Conexao.java</file>
+            <file>file:/D:/fontes-github/sistemajava/sistemacomercial-versao2.0/src/viewcadastro/CadastroVenda.java</file>
+            <file>file:/D:/fontes-github/sistemajava/sistemacomercial-versao2.0/src/viewcadastro/CadastroVendedores.java</file>
+            <file>file:/D:/fontes-github/sistemajava/sistemacomercial-versao2.0/src/model/Vendedor.java</file>
         </group>
     </open-files>
 </project-private>

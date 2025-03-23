@@ -1,4 +1,6 @@
-package principal.conexao;
+package principal;
+
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -105,6 +107,36 @@ public class Conexao {
         }
     }
     
+    public static int getProximoCodigo(String tabela, Object objeto){
+        int codigo = 0;
+        criaConexaoBanco();
+        
+        String sql = "";
+        if(tabela.equals("usuario")){
+            sql = "select nextval('usuario_usucodigo_seq') as codigo";
+        }
+        
+        Statement statement;
+        ResultSet resultset;
+        try {
+            statement = conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                ResultSet.CONCUR_READ_ONLY);
+
+            resultset = statement.executeQuery(sql);
+            if (resultset.next()) {
+                if(objeto instanceof Usuario){
+                    codigo = resultset.getInt("codigo");
+                } else {
+                    throw new SQLException("OBJETO NAO ENCONTRADO!\nObjeto:" + objeto.getClass().toString(), sql);
+                }
+            }
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "ERRO AO EXECUTAR SQL: \n" + erro.getMessage(), "ERRO AO EXECUTAR SQL", JOptionPane.ERROR_MESSAGE);            
+        }
+
+        return codigo;
+    }
+    
     public static ArrayList executaQuery(String sql, Object objeto){
         criaConexaoBanco();
         
@@ -133,10 +165,25 @@ public class Conexao {
                 }
             }
         } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "ERRO AO EXECUTAR SQL: \n" + erro.getMessage(), "ERRO AO EXECUTAR SQL", JOptionPane.ERROR_MESSAGE);            
+            JOptionPane.showMessageDialog(null, "ERRO AO EXECUTAR SQL: \n" + erro.getMessage(), "ERRO AO EXECUTAR SQL", JOptionPane.ERROR_MESSAGE);                        
         }
 
         return lista;
+    }
+    
+    public static boolean executaQueryInsertUpdate(String sql){
+        criaConexaoBanco();
+        
+        Statement statement;
+        try {
+            statement = conexao.createStatement();
+            statement.execute(sql);            
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "ERRO AO EXECUTAR SQL: \n" + erro.getMessage(), "ERRO AO EXECUTAR SQL", JOptionPane.ERROR_MESSAGE);                        
+            return false;
+        }
+
+        return true;
     }
     
 }

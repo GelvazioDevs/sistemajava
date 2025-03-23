@@ -1,10 +1,12 @@
 package viewcadastro;
 
-import model.validaCPF;
+import controller.ControllerUsuario;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import model.Cliente;
 import model.Usuario;
+import model.validaCPF;
+import principal.Conexao;
 import viewconsulta.consultaUsuarios;
 
 /**
@@ -13,12 +15,13 @@ import viewconsulta.consultaUsuarios;
 public class CadastroUsuario extends javax.swing.JFrame {
     Cliente cli = new Cliente();    
     Usuario usuario = new Usuario();
-    consultaUsuarios cons = new consultaUsuarios(this, true);
+    ControllerUsuario controller = new ControllerUsuario();
+    consultaUsuarios consulta = new consultaUsuarios(this, true);
 
     public CadastroUsuario() {
         initComponents();
         this.setLocationRelativeTo(null);
-        jTextField2.requestFocus();
+        edtCodigo.requestFocus();
     }
 
     /**
@@ -35,10 +38,10 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        edtSenha1 = new javax.swing.JTextField();
+        edtCodigo = new javax.swing.JTextField();
+        edtNome = new javax.swing.JTextField();
+        edtEmail = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -50,17 +53,12 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        edtLogin = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        edtSenha2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -84,41 +82,41 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel9.setText("Login");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
-        jTextField1.setEnabled(false);
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        edtSenha1.setEnabled(false);
+        edtSenha1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
+                edtSenha1KeyPressed(evt);
             }
         });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 410, -1));
+        getContentPane().add(edtSenha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 410, -1));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        edtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                edtCodigoActionPerformed(evt);
             }
         });
-        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+        edtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField2KeyPressed(evt);
+                edtCodigoKeyPressed(evt);
             }
         });
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 80, -1));
+        getContentPane().add(edtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 80, -1));
 
-        jTextField3.setEnabled(false);
-        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+        edtNome.setEnabled(false);
+        edtNome.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField3KeyPressed(evt);
+                edtNomeKeyPressed(evt);
             }
         });
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 410, -1));
+        getContentPane().add(edtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 410, -1));
 
-        jTextField4.setEnabled(false);
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+        edtEmail.setEnabled(false);
+        edtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField4KeyPressed(evt);
+                edtEmailKeyPressed(evt);
             }
         });
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 410, -1));
+        getContentPane().add(edtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 410, -1));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Valid Green.png"))); // NOI18N
         jButton2.setText("Gravar");
@@ -185,13 +183,13 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel10.setText("E-mail");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
 
-        jTextField5.setEnabled(false);
-        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+        edtLogin.setEnabled(false);
+        edtLogin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField5KeyPressed(evt);
+                edtLoginKeyPressed(evt);
             }
         });
-        getContentPane().add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 410, -1));
+        getContentPane().add(edtLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 410, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setText("E-mail");
@@ -199,93 +197,126 @@ public class CadastroUsuario extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setText("Confirmar Senha");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
-        jTextField6.setEnabled(false);
-        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+        edtSenha2.setEnabled(false);
+        edtSenha2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField6KeyPressed(evt);
+                edtSenha2KeyPressed(evt);
             }
         });
-        getContentPane().add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 410, -1));
+        getContentPane().add(edtSenha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 410, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (cli.GravarAlterar(Integer.parseInt(jTextField2.getText()), jTextField3.getText(),
-                jTextField4.getText(), jTextField1.getText())) {
-
-            JOptionPane.showMessageDialog(null, "Cliente gravado/alterado com sucesso!");
-            limpaCampos();
-            habilitaCampos(false);
-            jTextField2.requestFocus();
-        }
-
+//        if (cli.GravarAlterar(Integer.parseInt(jTextField2.getText()), 
+//            jTextField3.getText(),
+//            jTextField4.getText(), jTextField1.getText())) {
+//
+//            JOptionPane.showMessageDialog(null, "Registro gravado/alterado com sucesso!");
+//            limpaCampos();
+//            habilitaCampos(false);
+//            jTextField2.requestFocus();
+//        }
+        
+        int codigo = Integer.parseInt(edtCodigo.getText());
+        usuario.setCodigo(codigo);
+        usuario.setEmail(edtEmail.getText());
+        usuario.setLogin(edtLogin.getText());
+        usuario.setNome(edtNome.getText());
+        
+        String senha1 = edtSenha1.getText();
+        String senha2 = edtSenha2.getText();
+        
+        // Valida se as senhas são iguais
+        if(senha1.equals(senha2)){
+            // Grava/Altera Usuario
+            usuario.setSenha(senha1);
+            
+            boolean executou;
+            if(controller.getRegistro(codigo)){
+                executou = controller.gravarAlteracao(usuario);
+            } else {
+                executou = controller.gravarInclusao(usuario);                
+            }
+            
+            if(executou){
+                JOptionPane.showMessageDialog(null, "Registro gravado/alterado com sucesso!");
+                limpaCampos();
+                habilitaCampos(false);
+                edtCodigo.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao gravar/alterar registro!");                
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Senha não confere!");
+        }        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        cli.setCodigo(Integer.parseInt(jTextField2.getText()));
+        cli.setCodigo(Integer.parseInt(edtCodigo.getText()));
         if (cli.deletarCliente()) {
             JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!");
             limpaCampos();
             habilitaCampos(false);
-            jTextField2.requestFocus();
+            edtCodigo.requestFocus();
         }        
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
+    private void edtCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtCodigoKeyPressed
         if ((evt.getKeyCode() == KeyEvent.VK_ENTER) || (evt.getKeyCode() == KeyEvent.VK_TAB)) {
-            if (jTextField2.getText().equals("")) {
-                jTextField2.setText(String.valueOf(cli.retornaUltimo()));
+            if (edtCodigo.getText().equals("")) {
+                edtCodigo.setText(String.valueOf(Conexao.getProximoCodigo("usuario", usuario)));
                 habilitaCampos(true);
-                jTextField3.requestFocus();
+                edtNome.requestFocus();
                 cli.setAlteracao(false);
             } else {
-                cli.setCodigo(Integer.parseInt(jTextField2.getText()));
+                cli.setCodigo(Integer.parseInt(edtCodigo.getText()));
 
                 if (cli.procurarCliente()) {
-                    jTextField1.setText(cli.getEndereco());
-                    jTextField3.setText(cli.getNome());
-                    jTextField4.setText(cli.getCpf());
+                    edtSenha1.setText(cli.getEndereco());
+                    edtNome.setText(cli.getNome());
+                    edtEmail.setText(cli.getCpf());
 
                     cli.setAlteracao(true);
 
                     habilitaCampos(true);
-                    jTextField3.requestFocus();
+                    edtNome.requestFocus();
                 } else {
                     cli.setAlteracao(false);
-                    JOptionPane.showMessageDialog(null, "Cliente não existe!");
+                    JOptionPane.showMessageDialog(null, "Registro não existe!");
                     habilitaCampos(false);
-                    jTextField2.requestFocus();
+                    edtCodigo.requestFocus();
                 }
             }
         }
-    }//GEN-LAST:event_jTextField2KeyPressed
+    }//GEN-LAST:event_edtCodigoKeyPressed
 
-    private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
+    private void edtNomeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtNomeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            jTextField4.requestFocus();
+            edtEmail.requestFocus();
         }
-    }//GEN-LAST:event_jTextField3KeyPressed
+    }//GEN-LAST:event_edtNomeKeyPressed
 
-    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+    private void edtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtEmailKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String cpf = jTextField4.getText();
+            String cpf = edtEmail.getText();
             cpf = cpf.replace(".", "");
             cpf = cpf.replace("-", "");
-            jTextField4.setText(cpf);
-            if (validaCPF.validaCPF(jTextField4.getText())) {
+            edtEmail.setText(cpf);
+            if (validaCPF.validaCPF(edtEmail.getText())) {
                 // jTextField4.setText(val.imprimeCPF(jTextField4.getText()));
-                jTextField1.requestFocus();
+                edtSenha1.requestFocus();
             } else {
                 JOptionPane.showMessageDialog(null, "CPF Inválido");
-                jTextField4.requestFocus();
+                edtEmail.requestFocus();
             }
         }
-    }//GEN-LAST:event_jTextField4KeyPressed
+    }//GEN-LAST:event_edtEmailKeyPressed
 
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+    private void edtSenha1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtSenha1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Object[] opcoes = {"Sim", "Não"};
             int resposta;
@@ -293,57 +324,52 @@ public class CadastroUsuario extends javax.swing.JFrame {
                     JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
             if (resposta == 0) {
-                if (cli.GravarAlterar(Integer.parseInt(jTextField2.getText()), jTextField3.getText(),
-                        jTextField4.getText(), jTextField1.getText())) {
+                if (cli.GravarAlterar(Integer.parseInt(edtCodigo.getText()), edtNome.getText(),
+                        edtEmail.getText(), edtSenha1.getText())) {
 
                     JOptionPane.showMessageDialog(null, "Cliente gravado/alterado com sucesso!");
                     limpaCampos();
                     habilitaCampos(false);
-                    jTextField2.requestFocus();
+                    edtCodigo.requestFocus();
                 }
             }
         }
-    }//GEN-LAST:event_jTextField1KeyPressed
+    }//GEN-LAST:event_edtSenha1KeyPressed
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+    private void edtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCodigoActionPerformed
 
-    }//GEN-LAST:event_formWindowClosing
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_edtCodigoActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
         limpaCampos();
         habilitaCampos(false);
-        jTextField2.requestFocus();
+        edtCodigo.requestFocus();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-
-        jTextField2.setText(String.valueOf(cli.retornaUltimo()));
+        edtCodigo.setText(String.valueOf(cli.retornaUltimo()));
         habilitaCampos(true);
-        jTextField3.requestFocus();
+        edtNome.requestFocus();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        cons.setVisible(true);
-        jTextField2.setText(String.valueOf(cons.codigo));
-        jTextField2.requestFocus();
+        consulta.setVisible(true);
+        edtCodigo.setText(String.valueOf(consulta.codigo));
+        edtCodigo.requestFocus();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+    private void edtLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtLoginKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5KeyPressed
+    }//GEN-LAST:event_edtLoginKeyPressed
 
-    private void jTextField6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyPressed
+    private void edtSenha2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtSenha2KeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6KeyPressed
+    }//GEN-LAST:event_edtSenha2KeyPressed
 
     /**
      * @param args the command line arguments
@@ -384,26 +410,37 @@ public class CadastroUsuario extends javax.swing.JFrame {
     }
 
     public void habilitaCampos(boolean habilita) {
-        jTextField1.setEnabled(habilita);
-        jTextField3.setEnabled(habilita);
-        jTextField4.setEnabled(habilita);
+        edtNome.setEnabled(habilita);
+        edtEmail.setEnabled(habilita);
+        edtLogin.setEnabled(habilita);
+        edtSenha1.setEnabled(habilita);
+        edtSenha2.setEnabled(habilita);
+                
         jButton2.setEnabled(habilita);
         jButton3.setEnabled(habilita);
         jButton4.setEnabled(habilita);
 
-        jTextField2.setEnabled(!habilita);
+        edtCodigo.setEnabled(!habilita);
         jButton5.setEnabled(!habilita);
         jButton6.setEnabled(!habilita);
         jButton1.setEnabled(!habilita);
     }
 
     public void limpaCampos() {
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
+        edtCodigo.setText("");
+        edtNome.setText("");
+        edtEmail.setText("");
+        edtLogin.setText("");
+        edtSenha1.setText("");
+        edtSenha2.setText("");        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField edtCodigo;
+    private javax.swing.JTextField edtEmail;
+    private javax.swing.JTextField edtLogin;
+    private javax.swing.JTextField edtNome;
+    private javax.swing.JTextField edtSenha1;
+    private javax.swing.JTextField edtSenha2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -422,11 +459,5 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }

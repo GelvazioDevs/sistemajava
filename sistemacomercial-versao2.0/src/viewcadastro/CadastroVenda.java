@@ -1,18 +1,18 @@
 package viewcadastro;
 
-import viewconsulta.consultaClientes;
-import viewconsulta.consultaVendas;
-import viewconsulta.consultaProduto;
-import model.VendaProduto;
-import model.Venda;
-import model.Produto;
-import model.Vendedor;
-import model.Cliente;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.Cliente;
+import model.Produto;
+import model.Venda;
+import model.VendaProduto;
+import model.Vendedor;
+import viewconsulta.consultaClientes;
+import viewconsulta.consultaProduto;
+import viewconsulta.consultaVendas;
 
 /**
  * @author Gelvazio Camargo
@@ -241,7 +241,7 @@ public class CadastroVenda extends javax.swing.JFrame {
                 ButtonDeletarItemActionPerformed(evt);
             }
         });
-        getContentPane().add(ButtonDeletarItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 490, 130, 40));
+        getContentPane().add(ButtonDeletarItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, 150, 40));
 
         ButtonAdicionarVenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Add.png"))); // NOI18N
         ButtonAdicionarVenda.addActionListener(new java.awt.event.ActionListener() {
