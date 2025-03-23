@@ -1,7 +1,5 @@
 package principal;
 
-import model.Usuario;
-
 /**
  *
  * @author gelvazio camargo
@@ -14,6 +12,6 @@ public class UpdateEmSerie {
         String hashGerado = BCrypt.hashpw(senha, BCrypt.gensalt());
         String update = "update usuario set ususenha = '" + hashGerado + "'";
         
-        Conexao.executaQuery(update, new Usuario());
+        Conexao.executaQueryInsertUpdate(update);
     }
 }

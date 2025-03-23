@@ -3,9 +3,8 @@ package viewcadastro;
 import controller.ControllerUsuario;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
-import model.Cliente;
 import model.Usuario;
-import model.validaCPF;
+import principal.BCrypt;
 import principal.Conexao;
 import viewconsulta.consultaUsuarios;
 
@@ -13,11 +12,11 @@ import viewconsulta.consultaUsuarios;
  * @author Gelvazio Camargo
  */
 public class CadastroUsuario extends javax.swing.JFrame {
-    Cliente cli = new Cliente();    
     Usuario usuario = new Usuario();
     ControllerUsuario controller = new ControllerUsuario();
     consultaUsuarios consulta = new consultaUsuarios(this, true);
-
+    boolean existeUsuario = false;
+    
     public CadastroUsuario() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -38,11 +37,10 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        edtSenha1 = new javax.swing.JTextField();
         edtCodigo = new javax.swing.JTextField();
         edtNome = new javax.swing.JTextField();
         edtEmail = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        btnAlterarSenha = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -56,7 +54,11 @@ public class CadastroUsuario extends javax.swing.JFrame {
         edtLogin = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        edtSenha2 = new javax.swing.JTextField();
+        btnGravar = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        edtSenha3 = new javax.swing.JPasswordField();
+        edtSenha2 = new javax.swing.JPasswordField();
+        edtSenha1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -67,8 +69,8 @@ public class CadastroUsuario extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 650, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel6.setText("Senha");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
+        jLabel6.setText("Senha Atual");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 270, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("Código");
@@ -82,19 +84,6 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel9.setText("Login");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
-        edtSenha1.setEnabled(false);
-        edtSenha1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                edtSenha1KeyPressed(evt);
-            }
-        });
-        getContentPane().add(edtSenha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 410, -1));
-
-        edtCodigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtCodigoActionPerformed(evt);
-            }
-        });
         edtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 edtCodigoKeyPressed(evt);
@@ -111,22 +100,17 @@ public class CadastroUsuario extends javax.swing.JFrame {
         getContentPane().add(edtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 410, -1));
 
         edtEmail.setEnabled(false);
-        edtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                edtEmailKeyPressed(evt);
-            }
-        });
         getContentPane().add(edtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 410, -1));
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Valid Green.png"))); // NOI18N
-        jButton2.setText("Gravar");
-        jButton2.setEnabled(false);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnAlterarSenha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Valid Green.png"))); // NOI18N
+        btnAlterarSenha.setText("Alterar Senha");
+        btnAlterarSenha.setEnabled(false);
+        btnAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnAlterarSenhaActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 130, 40));
+        getContentPane().add(btnAlterarSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 150, 40));
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Remove Red.png"))); // NOI18N
         jButton3.setText("Excluir");
@@ -184,11 +168,6 @@ public class CadastroUsuario extends javax.swing.JFrame {
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
 
         edtLogin.setEnabled(false);
-        edtLogin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                edtLoginKeyPressed(evt);
-            }
-        });
         getContentPane().add(edtLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 410, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -199,66 +178,42 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel12.setText("Confirmar Senha");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
-        edtSenha2.setEnabled(false);
-        edtSenha2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                edtSenha2KeyPressed(evt);
+        btnGravar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Valid Green.png"))); // NOI18N
+        btnGravar.setText("Gravar");
+        btnGravar.setEnabled(false);
+        btnGravar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGravarActionPerformed(evt);
             }
         });
-        getContentPane().add(edtSenha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 410, -1));
+        getContentPane().add(btnGravar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 130, 40));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel13.setText("Senha");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
+
+        edtSenha3.setBackground(new java.awt.Color(242, 242, 242));
+        edtSenha3.setEnabled(false);
+        getContentPane().add(edtSenha3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 180, -1));
+
+        edtSenha2.setBackground(new java.awt.Color(242, 242, 242));
+        edtSenha2.setEnabled(false);
+        getContentPane().add(edtSenha2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 200, -1));
+
+        edtSenha1.setBackground(new java.awt.Color(242, 242, 242));
+        edtSenha1.setEnabled(false);
+        getContentPane().add(edtSenha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 200, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        if (cli.GravarAlterar(Integer.parseInt(jTextField2.getText()), 
-//            jTextField3.getText(),
-//            jTextField4.getText(), jTextField1.getText())) {
-//
-//            JOptionPane.showMessageDialog(null, "Registro gravado/alterado com sucesso!");
-//            limpaCampos();
-//            habilitaCampos(false);
-//            jTextField2.requestFocus();
-//        }
-        
-        int codigo = Integer.parseInt(edtCodigo.getText());
-        usuario.setCodigo(codigo);
-        usuario.setEmail(edtEmail.getText());
-        usuario.setLogin(edtLogin.getText());
-        usuario.setNome(edtNome.getText());
-        
-        String senha1 = edtSenha1.getText();
-        String senha2 = edtSenha2.getText();
-        
-        // Valida se as senhas são iguais
-        if(senha1.equals(senha2)){
-            // Grava/Altera Usuario
-            usuario.setSenha(senha1);
-            
-            boolean executou;
-            if(controller.getRegistro(codigo)){
-                executou = controller.gravarAlteracao(usuario);
-            } else {
-                executou = controller.gravarInclusao(usuario);                
-            }
-            
-            if(executou){
-                JOptionPane.showMessageDialog(null, "Registro gravado/alterado com sucesso!");
-                limpaCampos();
-                habilitaCampos(false);
-                edtCodigo.requestFocus();
-            } else {
-                JOptionPane.showMessageDialog(null, "Erro ao gravar/alterar registro!");                
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Senha não confere!");
-        }        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnAlterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarSenhaActionPerformed
+        executaAlteracaoSenha();
+    }//GEN-LAST:event_btnAlterarSenhaActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        cli.setCodigo(Integer.parseInt(edtCodigo.getText()));
-        if (cli.deletarCliente()) {
-            JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!");
+        if (controller.excluirRegistro(Integer.parseInt(edtCodigo.getText()))) {
+            JOptionPane.showMessageDialog(null, "Registro excluído com sucesso!");
             limpaCampos();
             habilitaCampos(false);
             edtCodigo.requestFocus();
@@ -271,21 +226,19 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 edtCodigo.setText(String.valueOf(Conexao.getProximoCodigo("usuario", usuario)));
                 habilitaCampos(true);
                 edtNome.requestFocus();
-                cli.setAlteracao(false);
+                btnAlterarSenha.setEnabled(false);
             } else {
-                cli.setCodigo(Integer.parseInt(edtCodigo.getText()));
-
-                if (cli.procurarCliente()) {
-                    edtSenha1.setText(cli.getEndereco());
-                    edtNome.setText(cli.getNome());
-                    edtEmail.setText(cli.getCpf());
-
-                    cli.setAlteracao(true);
+                int codigo = Integer.parseInt(edtCodigo.getText());                
+                if (controller.existeRegistro(codigo)) {
+                    existeUsuario = true;
+                    usuario = controller.getRegistro(codigo);
+                    edtNome.setText(usuario.getNome());
+                    edtEmail.setText(usuario.getEmail());
+                    edtLogin.setText(usuario.getLogin());
 
                     habilitaCampos(true);
                     edtNome.requestFocus();
                 } else {
-                    cli.setAlteracao(false);
                     JOptionPane.showMessageDialog(null, "Registro não existe!");
                     habilitaCampos(false);
                     edtCodigo.requestFocus();
@@ -300,55 +253,14 @@ public class CadastroUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_edtNomeKeyPressed
 
-    private void edtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtEmailKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String cpf = edtEmail.getText();
-            cpf = cpf.replace(".", "");
-            cpf = cpf.replace("-", "");
-            edtEmail.setText(cpf);
-            if (validaCPF.validaCPF(edtEmail.getText())) {
-                // jTextField4.setText(val.imprimeCPF(jTextField4.getText()));
-                edtSenha1.requestFocus();
-            } else {
-                JOptionPane.showMessageDialog(null, "CPF Inválido");
-                edtEmail.requestFocus();
-            }
-        }
-    }//GEN-LAST:event_edtEmailKeyPressed
-
-    private void edtSenha1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtSenha1KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            Object[] opcoes = {"Sim", "Não"};
-            int resposta;
-            resposta = JOptionPane.showOptionDialog(null, "Deseja Salvar?", "Finalização", JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
-
-            if (resposta == 0) {
-                if (cli.GravarAlterar(Integer.parseInt(edtCodigo.getText()), edtNome.getText(),
-                        edtEmail.getText(), edtSenha1.getText())) {
-
-                    JOptionPane.showMessageDialog(null, "Cliente gravado/alterado com sucesso!");
-                    limpaCampos();
-                    habilitaCampos(false);
-                    edtCodigo.requestFocus();
-                }
-            }
-        }
-    }//GEN-LAST:event_edtSenha1KeyPressed
-
-    private void edtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCodigoActionPerformed
-
-    }//GEN-LAST:event_edtCodigoActionPerformed
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-
         limpaCampos();
         habilitaCampos(false);
         edtCodigo.requestFocus();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        edtCodigo.setText(String.valueOf(cli.retornaUltimo()));
+        edtCodigo.setText(String.valueOf(Conexao.getProximoCodigo("usuario", usuario)));                
         habilitaCampos(true);
         edtNome.requestFocus();
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -363,13 +275,9 @@ public class CadastroUsuario extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void edtLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtLoginKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtLoginKeyPressed
-
-    private void edtSenha2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtSenha2KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtSenha2KeyPressed
+    private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
+        executaInclusaoAlteracao();
+    }//GEN-LAST:event_btnGravarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -413,10 +321,13 @@ public class CadastroUsuario extends javax.swing.JFrame {
         edtNome.setEnabled(habilita);
         edtEmail.setEnabled(habilita);
         edtLogin.setEnabled(habilita);
+        
         edtSenha1.setEnabled(habilita);
         edtSenha2.setEnabled(habilita);
-                
-        jButton2.setEnabled(habilita);
+        edtSenha3.setEnabled(habilita);            
+        
+        btnAlterarSenha.setEnabled(habilita);
+        btnGravar.setEnabled(habilita);
         jButton3.setEnabled(habilita);
         jButton4.setEnabled(habilita);
 
@@ -433,16 +344,54 @@ public class CadastroUsuario extends javax.swing.JFrame {
         edtLogin.setText("");
         edtSenha1.setText("");
         edtSenha2.setText("");        
+        edtSenha3.setText("");        
     }
+    
+    private void executaInclusaoAlteracao() {
+        int codigo = Integer.parseInt(edtCodigo.getText());
+        usuario.setCodigo(codigo);
+        usuario.setEmail(edtEmail.getText());
+        usuario.setLogin(edtLogin.getText());
+        usuario.setNome(edtNome.getText());
+        
+        String senha1 = new String(edtSenha1.getPassword());
+        String senha2 = new String(edtSenha2.getPassword());
+        
+        // Valida se as senhas são iguais
+        if(senha1.equals(senha2)){
+            boolean executou;
+            if(controller.existeRegistro(codigo)){
+                executou = controller.gravarAlteracao(usuario);
+            } else {
+                // Somente grava a senha na inclusão, tem um btão pra alterar senha depois...
+                usuario.setSenha(senha1);
+                executou = controller.gravarInclusao(usuario);                
+            }
+            
+            if(executou){
+                JOptionPane.showMessageDialog(null, "Registro gravado/alterado com sucesso!");
+                limpaCampos();
+                habilitaCampos(false);
+                edtCodigo.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao gravar/alterar registro!");                
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Senha não confere!");
+        }    
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlterarSenha;
+    private javax.swing.JButton btnGravar;
     private javax.swing.JTextField edtCodigo;
     private javax.swing.JTextField edtEmail;
     private javax.swing.JTextField edtLogin;
     private javax.swing.JTextField edtNome;
-    private javax.swing.JTextField edtSenha1;
-    private javax.swing.JTextField edtSenha2;
+    private javax.swing.JPasswordField edtSenha1;
+    private javax.swing.JPasswordField edtSenha2;
+    private javax.swing.JPasswordField edtSenha3;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -450,6 +399,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -460,4 +410,54 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     // End of variables declaration//GEN-END:variables
+
+    private boolean executaAlteracaoSenha() {
+        
+        String senha1 = new String(edtSenha1.getPassword());
+        String senha2 = new String(edtSenha2.getPassword());
+        String senha3 = new String(edtSenha3.getPassword());
+        
+        if(senha1.equals("") || senha2.equals("") || senha3.equals("")){
+            JOptionPane.showMessageDialog(null, "Informe a senha atual, nova senha e confirmação de senha!!");
+            return false;
+        }
+        
+        if(!existeUsuario){
+            JOptionPane.showMessageDialog(null, "Grave o usuário primeiro!");
+            return false;
+        }
+        
+        int codigo = Integer.parseInt(edtCodigo.getText());
+        
+        // Antes de iniciar a alteração, verifica se login e senha atual confere
+        String login = edtLogin.getText();
+        String senhaAtual = edtSenha3.getText();
+        if (!controller.validaLoginSenha(login, senhaAtual)) {
+            JOptionPane.showMessageDialog(null, "Login/Senha atual não confere!");
+            return false;
+        }
+        
+        // Valida se as 2 novas senhas são iguais
+        if(senha1.equals(senha2)){
+            boolean executou = false;
+            if(controller.existeRegistro(codigo)){
+                String senhaEncriptada = BCrypt.hashpw(senha1, BCrypt.gensalt());
+                String update = "UPDATE USUARIO SET ususenha = '" + senhaEncriptada + "' WHERE USUCODIGO = " + codigo;
+                executou = Conexao.executaQueryInsertUpdate(update);
+            }
+            
+            if(executou){
+                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!");
+                limpaCampos();
+                habilitaCampos(false);                
+                edtCodigo.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao alterar senha!");                
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Senha e Confirmação de senha não conferem!");
+        }
+        
+        return true;
+    }
 }

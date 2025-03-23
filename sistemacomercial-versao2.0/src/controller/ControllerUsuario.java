@@ -34,7 +34,7 @@ public class ControllerUsuario {
         return false;
     }    
     
-    public boolean getRegistro(int codigo){
+    public boolean existeRegistro(int codigo){
         String sql = "select * from usuario where usucodigo = " + codigo;
         
         ArrayList usuarios = Conexao.executaQuery(sql, new Usuario());
@@ -65,5 +65,29 @@ public class ControllerUsuario {
                          + ")";
         
         return Conexao.executaQueryInsertUpdate(sqlInsert);
+    }
+
+    public boolean excluirRegistro(int codigo) {
+        String sqlExcluir = "DELETE FROM usuario WHERE usucodigo = " + codigo;
+        return Conexao.executaQueryInsertUpdate(sqlExcluir);
+    }
+
+    public Usuario getRegistro(int codigo) {
+        String sql = " select usucodigo,  "
+                    + "       usunome,    "
+                    + "       usulogin,   "
+                    + "       ususenha,   "
+                    + "       usuemail    "
+                    + "  from usuario     "
+                    + " where usucodigo = '" + codigo + "'";
+        
+        ArrayList usuarios = Conexao.executaQuery(sql, new Usuario());
+        
+        // Se houver usuario, valida a senha
+        Usuario usuarioBanco = new Usuario();
+        if(!usuarios.isEmpty()){
+            usuarioBanco = (Usuario) usuarios.getFirst();
+        }
+        return usuarioBanco;
     }
 }

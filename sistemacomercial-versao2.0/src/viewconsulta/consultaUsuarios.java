@@ -14,7 +14,7 @@ import principal.Conexao;
  */
 public class consultaUsuarios extends javax.swing.JDialog {
 
-    private static final int BUSCAR_TODOS = 0;
+    public static final int BUSCAR_TODOS = 0;
 
     public int codigo;
     public String nome;
@@ -117,7 +117,6 @@ public class consultaUsuarios extends javax.swing.JDialog {
         botaoNome = new javax.swing.JRadioButton();
         botaoCodigo = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
@@ -180,21 +179,13 @@ public class consultaUsuarios extends javax.swing.JDialog {
         });
         getContentPane().add(botaoCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, -1, -1));
 
-        jButton1.setText("Pesquisar Usuário");
+        jButton1.setText("Pesquisar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 80, -1, -1));
-
-        jButton2.setText("Pesquisar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -244,10 +235,6 @@ public class consultaUsuarios extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         atualizaConsultaUsuario();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void atualizaConsultaUsuario(){
         DefaultTableModel model = (DefaultTableModel) tabelaConsultaUsuarios.getModel();
@@ -334,7 +321,6 @@ public class consultaUsuarios extends javax.swing.JDialog {
     private javax.swing.JRadioButton botaoTodos;
     private javax.swing.JTextField edtConsulta;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator8;
