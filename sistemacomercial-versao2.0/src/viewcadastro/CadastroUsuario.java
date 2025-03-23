@@ -110,7 +110,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 btnAlterarSenhaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAlterarSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 150, 40));
+        getContentPane().add(btnAlterarSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 180, 40));
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Knob Remove Red.png"))); // NOI18N
         jButton3.setText("Excluir");
@@ -226,6 +226,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 edtCodigo.setText(String.valueOf(Conexao.getProximoCodigo("usuario", usuario)));
                 habilitaCampos(true);
                 edtNome.requestFocus();
+                edtSenha3.setEnabled(false);
                 btnAlterarSenha.setEnabled(false);
             } else {
                 int codigo = Integer.parseInt(edtCodigo.getText());                
