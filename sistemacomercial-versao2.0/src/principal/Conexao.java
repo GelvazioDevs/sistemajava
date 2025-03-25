@@ -171,13 +171,13 @@ public class Conexao {
         return lista;
     }
     
-    public static boolean executaQueryInsertUpdate(String sql){
+    public static boolean executeUpdate(String sql){
         criaConexaoBanco();
         
         Statement statement;
         try {
             statement = conexao.createStatement();
-            statement.execute(sql);            
+            statement.executeUpdate(sql);            
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "ERRO AO EXECUTAR SQL: \n" + erro.getMessage(), "ERRO AO EXECUTAR SQL", JOptionPane.ERROR_MESSAGE);                        
             return false;

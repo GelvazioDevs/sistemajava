@@ -444,7 +444,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
             if(controller.existeRegistro(codigo)){
                 String senhaEncriptada = BCrypt.hashpw(senha1, BCrypt.gensalt());
                 String update = "UPDATE USUARIO SET ususenha = '" + senhaEncriptada + "' WHERE USUCODIGO = " + codigo;
-                executou = Conexao.executaQueryInsertUpdate(update);
+                executou = Conexao.executeUpdate(update);
             }
             
             if(executou){

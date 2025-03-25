@@ -12,6 +12,6 @@ public class UpdateEmSerie {
         String hashGerado = BCrypt.hashpw(senha, BCrypt.gensalt());
         String update = "update usuario set ususenha = '" + hashGerado + "'";
         
-        Conexao.executaQueryInsertUpdate(update);
+        Conexao.executeUpdate(update);
     }
 }

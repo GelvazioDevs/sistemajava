@@ -51,7 +51,7 @@ public class ControllerUsuario {
                          + "      ,ususenha = '" + BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt()) + "'"
                          + " where usucodigo = " + usuario.getCodigo();
         
-        return Conexao.executaQueryInsertUpdate(sqlUpdate);
+        return Conexao.executeUpdate(sqlUpdate);
     }
 
     public boolean gravarInclusao(Usuario usuario) {
@@ -64,12 +64,12 @@ public class ControllerUsuario {
                          + ",'" + usuario.getEmail() + "'"
                          + ")";
         
-        return Conexao.executaQueryInsertUpdate(sqlInsert);
+        return Conexao.executeUpdate(sqlInsert);
     }
 
     public boolean excluirRegistro(int codigo) {
         String sqlExcluir = "DELETE FROM usuario WHERE usucodigo = " + codigo;
-        return Conexao.executaQueryInsertUpdate(sqlExcluir);
+        return Conexao.executeUpdate(sqlExcluir);
     }
 
     public Usuario getRegistro(int codigo) {

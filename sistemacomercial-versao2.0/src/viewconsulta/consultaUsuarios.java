@@ -1,11 +1,8 @@
 package viewconsulta;
 
-import controller.ControllerPessoa;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.Cliente;
-import model.Pessoa;
 import model.Usuario;
 import principal.Conexao;
 
@@ -19,7 +16,6 @@ public class consultaUsuarios extends javax.swing.JDialog {
     public int codigo;
     public String nome;
 
-    Cliente cli = new Cliente();
     Usuario usuario = new Usuario();
     
     /**
@@ -33,7 +29,16 @@ public class consultaUsuarios extends javax.swing.JDialog {
 
     public void filtraUsuarios(int codigoUsuario) {
         String sql = "select * from usuario order by usucodigo";
+        if (codigoUsuario != BUSCAR_TODOS) {
+            sql = "select * from usuario order by usucodigo";
+        }
+        
         atualizaTabelaUsuarios(sql);
+    }
+
+    public void filtraUsuariosPorNome(String nome) {
+        String sql = "select * from usuario where usunome ilike '%" + nome + "%' order by usucodigo";
+        atualizaTabelaClientes(sql);        
     }
 
     public void atualizaTabelaUsuarios(String sql){
@@ -52,53 +57,30 @@ public class consultaUsuarios extends javax.swing.JDialog {
             });
         }
     }
-    
-    public void filtraClientes(int codigoCliente) {
-        // Seta os clientes do banco de dados na consulta
-        String sqlPessoa = "select * from pessoa where coalesce(fg_vendedor, 0) = 1 and codigo = " + codigoCliente + " order by codigo";
-        if (codigoCliente == BUSCAR_TODOS) {
-            sqlPessoa = "select * from pessoa where coalesce(fg_vendedor, 0) = 1 order by codigo";
-        }
-        
-        //atualizaTabelaClientes(sqlPessoa);
-    }
 
-    public void filtraClientesPorNome(String nome) {
-        String sqlPessoa = "select * from pessoa where coalesce(fg_vendedor, 0) = 1 and nome ilike '%" + nome + "%' order by codigo";
-        //atualizaTabelaClientes(sqlPessoa);        
-    }
-
-    public void atualizaTabelaClientes(String sqlPessoa){
-        ControllerPessoa controllerPessoa = new ControllerPessoa();
+    public void atualizaConsultaUsuario(){
         DefaultTableModel model = (DefaultTableModel) tabelaConsultaUsuarios.getModel();
-        
-        // Limpa a tabela
-        model.setRowCount(0);
-
-        ArrayList<Pessoa> listaPessoas = controllerPessoa.getAll(sqlPessoa);
-        boolean temClientes = false;
-        for (Pessoa auxPessoa : listaPessoas) {
-            if(auxPessoa.getCodigo() > 0){
-                temClientes = true;
+        model.setNumRows(0);
+        if (botaoTodos.isSelected()) {
+            filtraUsuarios(BUSCAR_TODOS);
+        } else if (botaoCodigo.isSelected()) {
+            if(edtConsulta.getText().equals("")){
+                JOptionPane.showMessageDialog(rootPane, "Informe o codigo do usuario!");
+            } else {
+                // Pega o codigo da Consulta
+                int codigoPesquisa = Integer.parseInt(edtConsulta.getText());
+                filtraUsuarios(codigoPesquisa);                
             }
-        }
-        
-        if(temClientes){
-            JOptionPane.showMessageDialog(rootPane, "Listando vendedores encontrados...");
-            
-            for (Pessoa auxPessoa : listaPessoas) {
-                model.addRow(new Object[]{
-                    auxPessoa.getCodigo(),
-                    auxPessoa.getNome(),
-                    auxPessoa.getCpf(),
-                    auxPessoa.getEndereco()
-                });
+        } else if (botaoNome.isSelected()) {
+            if(edtConsulta.getText().equals("")){
+                JOptionPane.showMessageDialog(rootPane, "Informe o nome do usuario!");
+            } else {
+                String nomeFiltrado = edtConsulta.getText().toUpperCase();
+                filtraUsuariosPorNome(nomeFiltrado);
             }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "vendedores não encontrados com o filtro informado!");
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -236,41 +218,6 @@ public class consultaUsuarios extends javax.swing.JDialog {
         atualizaConsultaUsuario();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void atualizaConsultaUsuario(){
-        DefaultTableModel model = (DefaultTableModel) tabelaConsultaUsuarios.getModel();
-        model.setNumRows(0);
-        //cli.setListaCli(cli.retornaClientes());
-
-        if (botaoTodos.isSelected()) {
-            filtraUsuarios(BUSCAR_TODOS);
-        }
-    }
-    
-    public void atualizaConsulta(){
-        DefaultTableModel model = (DefaultTableModel) tabelaConsultaUsuarios.getModel();
-        model.setNumRows(0);
-        cli.setListaCli(cli.retornaClientes());
-
-        if (botaoTodos.isSelected()) { //Todos
-            filtraClientes(BUSCAR_TODOS);
-        } else if (botaoCodigo.isSelected()) { //Código
-            if(edtConsulta.getText().equals("")){
-                JOptionPane.showMessageDialog(rootPane, "Informe o codigo do vendedor!");
-            } else {
-                // Pega o codigo da Consulta
-                int codigoPesquisa = Integer.parseInt(edtConsulta.getText());
-                filtraClientes(codigoPesquisa);                
-            }
-        } else if (botaoNome.isSelected()) {
-            if(edtConsulta.getText().equals("")){
-                JOptionPane.showMessageDialog(rootPane, "Informe o nome do vendedor!");
-            } else {
-                String nomeFiltrado = edtConsulta.getText().toUpperCase();
-                filtraClientesPorNome(nomeFiltrado);
-            }
-        }
-    }
-    
     /**
      * @param args the command line arguments
      */

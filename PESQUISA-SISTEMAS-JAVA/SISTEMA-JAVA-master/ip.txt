@@ -1,0 +1,1 @@
+jdbc:postgresql://ep-damp-waterfall-a5s23fvv.us-east-2.aws.neon.tech:5432/neondb
