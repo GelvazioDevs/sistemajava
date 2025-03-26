@@ -1,10 +1,11 @@
 package principal;
 
-import viewcadastro.CadastroVenda;
-import viewcadastro.CadastroProdutos;
 import viewcadastro.CadastroCliente;
+import viewcadastro.CadastroProdutos;
 import viewcadastro.CadastroUsuario;
+import viewcadastro.CadastroVenda;
 import viewcadastro.CadastroVendedores;
+import viewcadastro.ChamadasApi;
 
 /**
  *
@@ -17,6 +18,7 @@ public class Principal extends javax.swing.JFrame {
     CadastroProdutos pro    = new CadastroProdutos();
     CadastroVenda ven       = new CadastroVenda();
     CadastroUsuario usuario = new CadastroUsuario();
+    ChamadasApi chamadasApi = new ChamadasApi();
 
     public Principal() {
         initComponents();
@@ -42,6 +44,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -98,6 +101,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu4.add(jMenuItem5);
+
+        jMenuItem6.setText("Chamadas Api");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem6);
 
         jMenuBar1.add(jMenu4);
 
@@ -156,6 +167,10 @@ public class Principal extends javax.swing.JFrame {
         usuario.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        chamadasApi.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -202,6 +217,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

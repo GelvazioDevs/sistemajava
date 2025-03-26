@@ -38,7 +38,7 @@ public class consultaUsuarios extends javax.swing.JDialog {
 
     public void filtraUsuariosPorNome(String nome) {
         String sql = "select * from usuario where usunome ilike '%" + nome + "%' order by usucodigo";
-        atualizaTabelaClientes(sql);        
+        //atualizaTabelaClientes(sql);        
     }
 
     public void atualizaTabelaUsuarios(String sql){
