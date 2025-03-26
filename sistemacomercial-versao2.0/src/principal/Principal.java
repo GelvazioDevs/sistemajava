@@ -1,11 +1,11 @@
 package principal;
 
+import api.ChamadasApi;
 import viewcadastro.CadastroCliente;
 import viewcadastro.CadastroProdutos;
 import viewcadastro.CadastroUsuario;
 import viewcadastro.CadastroVenda;
 import viewcadastro.CadastroVendedores;
-import viewcadastro.ChamadasApi;
 
 /**
  *
@@ -13,7 +13,7 @@ import viewcadastro.ChamadasApi;
  */
 public class Principal extends javax.swing.JFrame {
 
-    CadastroCliente cli    = new CadastroCliente();
+    CadastroCliente cli     = new CadastroCliente();
     CadastroVendedores vend = new CadastroVendedores();
     CadastroProdutos pro    = new CadastroProdutos();
     CadastroVenda ven       = new CadastroVenda();
